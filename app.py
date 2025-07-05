@@ -1,29 +1,25 @@
 import streamlit as st
 from captions import generate_caption
-from utils import get_hashtags
 
-st.markdown("<style>" + open('styles/style.css').read() + "</style>", unsafe_allow_html=True)
+st.set_page_config(page_title="📸 AI Caption Generator", layout="centered")
 
-st.markdown("""
-    <div style='text-align: center; padding: 1rem 0;'>
-        <h1>📱 AI Instagram Caption Assistant</h1>
-        <p style='color:gray;'>Describe your post and get catchy captions with trending hashtags ✨</p>
-    </div>
-""", unsafe_allow_html=True)
+# Load CSS
+try:
+    with open("styles/style.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+except FileNotFoundError:
+    st.warning("⚠️ style.css not found.")
 
+st.title("📸 AI Instagram Caption Generator")
+st.markdown("Generate creative captions with trending hashtags using Gemini AI.")
 
-st.set_page_config(page_title="Insta Caption Wizard", page_icon="📸")
-st.title("📱 AI Instagram Caption Assistant")
+description = st.text_input("Describe your Instagram post 👇")
 
-description = st.text_input("Describe your post (e.g., 'sunset by the beach')")
-
-category = st.selectbox("Choose a category", ["travel", "food", "fashion", "tech", "fitness"])
-
-if st.button("Generate Caption"):
-    with st.spinner("Summoning captions..."):
+if st.button("✨ Generate Caption"):
+    if description.strip():
         caption = generate_caption(description)
-        hashtags = " ".join(get_hashtags(category))
-        full_caption = f"{caption}\n\n{hashtags}"
-        st.text_area("✨ Your Caption", value=full_caption, height=150)
-        st.success("Caption ready! You can copy and use it 🚀")
-
+        st.success("📝 Here's your AI-generated caption:")
+        st.code(caption, language="markdown")
+        st.button("📋 Copy Caption", on_click=st.toast("✅ Caption copied to clipboard!"))
+    else:
+        st.warning("Please enter a description.")
