@@ -1,19 +1,24 @@
-import google.generativeai as genai
+import requests
 import streamlit as st
 
-# Use Gemini MakerSuite API key securely
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-
-# Load the Gemini Pro model
-model = genai.GenerativeModel("gemini-pro")
+GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 def generate_caption(prompt):
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
+
+    headers = {"Content-Type": "application/json"}
+    data = {
+        "contents": [
+            {
+                "parts": [{"text": f"Generate an Instagram caption with relevant hashtags for: {prompt}"}]
+            }
+        ]
+    }
+
     try:
-        response = model.generate_content(
-            f"Generate an engaging Instagram caption for this: {prompt}",
-            generation_config={"temperature": 0.9}
-        )
-        return response.text.strip()
+        response = requests.post(url, headers=headers, json=data)
+        result = response.json()
+        return result["candidates"][0]["content"]["parts"][0]["text"]
     except Exception as e:
         st.error(f"❌ Gemini API error: {e}")
-        return "⚠️ Error generating caption."
+        return "⚠️ Failed to generate caption."
