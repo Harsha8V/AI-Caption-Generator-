@@ -54,7 +54,7 @@ ai-caption-generator/
 Go to the **Secrets tab** and add:
 
 ```toml
-GEMINI_API_KEY = "your-makersuite-api-key"
+GEMINI_API_KEY = "AIzaSyAE5DFwvti72wigTfJGXt8a55OLpeH9JfU"
 ```
 
 Get your API key from [https://makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey)
