@@ -10,7 +10,7 @@ def generate_caption(prompt):
     data = {
         "contents": [
             {
-                "parts": [{"text": f"Generate an Instagram caption with relevant hashtags for: {prompt}"}]
+                "parts": [{"text": f"Generate an Instagram caption with trending hashtags for: {prompt}"}]
             }
         ]
     }
@@ -18,6 +18,11 @@ def generate_caption(prompt):
     try:
         response = requests.post(url, headers=headers, json=data)
         result = response.json()
+        
+        # Debug log output
+        st.json(result)
+
+        # Extract response
         return result["candidates"][0]["content"]["parts"][0]["text"]
     except Exception as e:
         st.error(f"❌ Gemini API error: {e}")
