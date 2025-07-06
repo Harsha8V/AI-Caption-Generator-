@@ -1,39 +1,36 @@
 import requests
 import streamlit as st
 
-GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 
 def generate_caption(prompt):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/chat-bison-001:generateMessage?key={GEMINI_API_KEY}"
-
+    url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
 
-    data = {
-        "prompt": {
-            "messages": [
-                {
-                    "author": "user",
-                    "content": f"Write a creative and short Instagram caption with trending hashtags for this: {prompt}"
-                }
-            ]
-        },
-        "temperature": 0.9,
-        "candidateCount": 1
+    payload = {
+        "model": "llama3-70b-8192",
+        "messages": [
+            {"role": "system", "content": "You are an assistant that writes short, catchy Instagram captions with trending hashtags."},
+            {"role": "user", "content": f"Generate an Instagram caption for: {prompt}"}
+        ],
+        "temperature": 0.8
     }
 
     try:
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=payload)
         result = response.json()
+        st.json(result)  # DEBUG: Show full response
 
-        if "candidates" in result:
-            return result["candidates"][0]["content"]
+        if "choices" in result:
+            return result["choices"][0]["message"]["content"]
         elif "error" in result:
-            st.error(f"🛑 Gemini API error: {result['error'].get('message')}")
+            st.error(f"🛑 Groq API error: {result['error']['message']}")
         else:
-            st.error("🛑 Unexpected response from Gemini.")
+            st.error("🛑 Unexpected response from Groq.")
         return "⚠️ Failed to generate caption."
     except Exception as e:
-        st.error(f"❌ Gemini API call failed: {e}")
+        st.error(f"❌ Groq API call failed: {e}")
         return "⚠️ Failed to generate caption."
