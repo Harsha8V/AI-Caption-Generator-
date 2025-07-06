@@ -4,8 +4,8 @@ import streamlit as st
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 def generate_caption(prompt):
-    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
-
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
+    
     headers = {"Content-Type": "application/json"}
     data = {
         "contents": [
