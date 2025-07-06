@@ -3,19 +3,23 @@ import streamlit as st
 
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
-def generate_caption(user_input):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/text-bison-001:generateText?key={GEMINI_API_KEY}"
+def generate_caption(prompt):
+    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
 
     headers = {
         "Content-Type": "application/json"
     }
 
     data = {
-        "prompt": {
-            "text": f"Write a short, catchy Instagram caption with trending hashtags for the following post: {user_input}"
-        },
-        "temperature": 0.7,
-        "candidateCount": 1
+        "contents": [
+            {
+                "parts": [
+                    {
+                        "text": f"Write a short, engaging Instagram caption with trending hashtags for this description: {prompt}"
+                    }
+                ]
+            }
+        ]
     }
 
     try:
@@ -23,7 +27,7 @@ def generate_caption(user_input):
         result = response.json()
 
         if "candidates" in result:
-            return result["candidates"][0]["output"]
+            return result["candidates"][0]["content"]["parts"][0]["text"]
         elif "error" in result:
             st.error(f"🛑 Gemini API error: {result['error'].get('message')}")
         else:
