@@ -9,7 +9,7 @@ Create engaging, creative Instagram captions with trending hashtags using Google
 
 ## 🚀 Live Demo
 
-🟢 [Try the App on Streamlit Cloud](https://your-streamlit-cloud-link.streamlit.app)
+🟢 [Try the App on Streamlit Cloud](https://aicaptiongenerator.streamlit.app/)
 
 ---
 
