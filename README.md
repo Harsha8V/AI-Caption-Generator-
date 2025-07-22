@@ -4,7 +4,7 @@ Generate short, catchy Instagram captions with trending hashtags using LLaMA 3 v
 
 ## 🚀 Live Demo
 
-Coming soon via Streamlit Cloud.
+https://aicaptiongenerator.streamlit.app/
 
 ---
 
